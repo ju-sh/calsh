@@ -2,6 +2,7 @@
 
 #XXX: Change exit to return
 #XXX: Change is_pos_int to is_whole_num
+#XXX: Change all fns to echo instead of return
 
 # Internal exit codes:
 #
@@ -19,13 +20,13 @@ function is_pos_integer {
     # Otherwise negative value is returned
     if (( "$#" == 0 ))
     then
-        echo "Error: is_pos_integer (function): No arguments"
+        echo "Error: is_pos_integer (function): No arguments" >2
         exit -2
     fi
 
     case "$1" in
         ("" | *[!0-9]*)
-            return -1
+            return 1
     esac
     return 0
 }
@@ -36,26 +37,29 @@ function check_month {
     # Returns a number
     if (( "$#" == 0 ))
     then
-        echo "Error: check_month (function): No arguments"
+        echo "Error: check_month (function): No arguments" >2
         exit -2
     fi
 
     is_pos_integer "$1"
-    if (( "$?" == 0 )) && (( "$1" > 0 )) && (( "$1" < 13 ))
+    exit_code="$?"
+    if (( "$exit_code" == 0 )) && (( "$1" > 0 )) && (( "$1" < 13 ))
     then
-        echo "Debug: month_arg is a valid month num"
+        echo "Debug: month_arg is a valid month num" >2
         month_num=$1
     else
-        echo "Debug: month_arg is not a valid month num"
-        month_num=$(date --date="$(printf "28 %s 2020" $1)" +"%m")
+        echo "Debug: month_arg is not a valid month num" >2
+        
+        dummy_date=$(printf "28 %s 2020" "$1")
+        month_num=$(date --date="$dummy_date" +"%m")
         if (( "$?" == 1 ))
         then
-            echo "Debug: month_arg is not a valid month name as well"
-            return -1
+            echo "Debug: month_arg is not a valid month name as well" >2
+            echo "-1"   # rv
         fi
     fi
-    echo "Debug: month_arg is a valid month name"
-    return $month_num
+    echo "Debug: month_arg is a valid month name" >2
+    echo "$month_num"   # rv
 }
 
 function check_year {
@@ -64,26 +68,27 @@ function check_year {
     # Returns zero number
     if (( "$#" == 0 ))
     then
-        echo "Error: check_year (function): No arguments"
-        return 0
+        echo "Error: check_year (function): No arguments" >2
+        echo "-1"   # rv
     fi
     
     is_pos_integer "$1"
-    if (( "$?" == 0 )) && (( "$1" > 0 )) && (( "$1" < 10000 ))
+    exit_code="$?"
+    if (( "$exit_code" == 0 )) && (( "$1" > 0 )) && (( "$1" < 10000 ))
     then
-        echo "Debug: year_arg is a valid year"
-        echo "check: year $1"
-        return "$1"
+        echo "Debug: year_arg is a valid year" >2
+        echo "check: year $1" >2
+        echo "$1"   # rv
     else
-        echo "Debug: year_arg is not a valid year"
-        return 0
+        echo "Debug: year_arg is not a valid year" >2
+        echo "-1"   # rv
     fi
 }
 
 # Obtain required arguments
 if (( "$#" > 2 ))
 then
-    echo "Error: Too many arguments"
+    echo "Error: Too many arguments" >2
     exit 1
 elif (( "$#" == 2 ))
 then
@@ -99,33 +104,31 @@ elif (( "$#" == 0 ))
 then
     month_arg=$(date +%m)
     year_arg=$(date +%Y)
-    #echo "No pos args"
+    #echo "No pos args" >2
 fi
 
-echo "$month_arg, $year_arg"
+echo "$month_arg, $year_arg" >2
 
 # Parse month
-check_month "$month_arg"
-month="$?"
-if (( $month == -1 ))
+month=$(check_month "$month_arg")
+if (( month == -1 ))
 then
-    echo "Error: $month_arg is neither a month number (1..12) nor a name"
+    echo "Error: $month_arg is neither a month number (1..12) nor a name" >2
     exit 1
 fi
 
 # Parse year
-check_year "$year_arg"
-year="$?"
-echo "check_year_rv: $year"
-if (( $year == 0 ))
+year=$(check_year "$year_arg")
+echo "check_year_rv: $year" >2
+if (( year == 0 ))
 then
-    echo "Error: year $year not in range 1..9999"
+    echo "Error: year $year not in range 1..9999" >2
     exit 1
 fi
 
 
-echo "$month, $year"
-read -n1
+echo "$month, $year" 
+read -rn1
 
 # The event loop
 response='a'
@@ -133,62 +136,62 @@ while [ "$response" != $'\E' ] && [ "$response" != "q" ]
 do
     clear
     cal "$month" "$year"
-    read -n1 response
-    printf '\n%q\n' "$response"
+    read -rn1 response
+    printf '\n%q\n' "$response" >2
 
     # Increment century
     if [[ $response == $'\6' ]]
     then
-        if (( $year < 9900 ))
+        if (( year < 9900 ))
         then
             year=$((year + 100))
         fi
-        echo "C-f!"
+        echo "C-f!" >2
 
     # Decrement century
     elif [[ $response == $'\2' ]]
     then
-        if (( $year > 100 ))
+        if (( year > 100 ))
         then
             year=$((year - 100))
         fi
-        echo "C-b!"
+        echo "C-b!" >2
 
     # Increment decade
     elif [[ $response == 'L' ]]
     then
-        if (( $year < 9990 ))
+        if (( year < 9990 ))
         then
             year=$((year + 10))
         fi
-        echo "L!"
+        echo "L!" >2
 
     # Decrement decade
     elif [[ $response == 'H' ]]
     then
-        if (( $year > 10 ))
+        if (( year > 10 ))
         then
             year=$((year - 10))
         fi
-        echo "H!"
+        echo "H!" >2
 
     # Increment year
     elif [[ $response == 'l' ]]
     then
-        if (( $year < 9999 ))
+        if (( year < 9999 ))
         then
             year=$((year + 1))
         fi
-        echo "l!"
+        echo "l!" >2
 
     # Decrement year
     elif [[ $response == 'h' ]]
     then
-        if (( $year > 1 ))
+        if (( year > 1 ))
         then
             year=$((year - 1))
         fi
-        echo "h!"
+        echo "h!" >2
 
     # Increment month
     elif [[ $response == 'j' ]]
@@ -200,7 +203,7 @@ do
         else
             month=$((month + 1))
         fi
-        echo "j!"
+        echo "j!" >2
 
     # Decrement month
     elif [[ $response == 'k' ]]
@@ -212,7 +215,7 @@ do
         else
             month=$((month - 1))
         fi
-        echo "k!"
+        echo "k!" >2
     fi
 done
 #echo $response

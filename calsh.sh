@@ -65,7 +65,6 @@ function parse_year {
     fi
 }
 
-#KL34G2350
 # Configure keys
 n_century=$'\6'  # C-f
 p_century=$'\2'  # C-b

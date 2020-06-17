@@ -2,6 +2,8 @@
 
 A bash script to have a limited interactive version of the `cal` command to view the calendar.
 
+<p align="center"><img src="https://github.com/ju-sh/calsh/blob/master/screenshots/screenshot.gif?raw=true"/></p>
+
 ## Usage
 
     calsh [[month] year]

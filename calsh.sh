@@ -1,26 +1,11 @@
 #!/bin/bash
 
-#XXX: Change exit to return
-#XXX: Change is_pos_int to is_whole_num
-#XXX: Change all fns to echo instead of return
-
-# Internal exit codes:
-#
-#  0: Success
-#  -1: Value error
-#  -2: Invalid number of arguments
-#
-# Exposed exit codes:
-#
-#  0: Success
-#  1: Error
-
-function is_pos_integer {
+function is_whole_num {
     # Returns zero if argument has only digits
     # Otherwise non-zero value is returned
     if (( "$#" == 0 ))
     then
-        echo "Error: is_pos_integer (function): No arguments" >2
+        echo "Error: is_whole_num (function): No arguments" >&2
         return 1
     fi
 
@@ -32,54 +17,65 @@ function is_pos_integer {
 }
 
 function parse_month {
-    # Parse month name to month number
-    # Return negative value on error
-    # Returns a number
+    # Check if argument is a valid month name or number
+    # Write parsed month's number to STDOUT
+    # Write -1 to STDOUT on error
     if (( "$#" == 0 ))
     then
-        echo "Error: parse_month (function): No arguments" >2
+        echo "Error: parse_month (function): No arguments" >&2
         echo "-1"
     fi
 
-    if is_pos_integer "$1" && (( "$1" > 0 )) && (( "$1" < 13 ))
+    if is_whole_num "$1" && (( "$1" > 0 )) && (( "$1" < 13 ))
     then
-        echo "Debug: month_arg is a valid month num" >2
+        echo "Debug: month_arg is a valid month num" >&2
         month_num=$1
     else
-        echo "Debug: month_arg is not a valid month num" >2
+        echo "Debug: month_arg is not a valid month num" >&2
         
-        dummy_date=$(printf "28 %s 2020" "$1")
-        month_num=$(date --date="$dummy_date" +"%m")
+        month_num=$(date --date="28 $1 2020" +"%m")
         if (( "$?" == 1 ))
         then
-            echo "Debug: month_arg is not a valid month name as well" >2
+            echo "Debug: month_arg is not a valid month name as well" >&2
             echo "-1"   # rv
         fi
     fi
-    echo "Debug: month_arg is a valid month name" >2
+    echo "Debug: month_arg is a valid month name" >&2
     echo "$month_num"   # rv
 }
 
 function parse_year {
-    # Check if argument is a natural number less than 9999 
-    # Return 0 on error
-    # Returns zero number
+    # Checks if argument is a natural number less than 9999 
+    # Write -1 to STDOUT on error
+    # Returns parsed year
     if (( "$#" == 0 ))
     then
-        echo "Error: parse_year (function): No arguments" >2
+        echo "Error: parse_year (function): No arguments" >&2
         echo "-1"   # rv
     fi
     
-    if is_pos_integer "$1" && (( "$1" > 0 )) && (( "$1" < 10000 ))
+    if is_whole_num "$1" && (( "$1" > 0 )) && (( "$1" < 10000 ))
     then
-        echo "Debug: year_arg is a valid year" >2
-        echo "check: year $1" >2
+        echo "Debug: year_arg is a valid year" >&2
+        echo "check: year $1" >&2
         echo "$1"   # rv
     else
-        echo "Debug: year_arg is not a valid year" >2
+        echo "Debug: year_arg is not a valid year" >&2
         echo "-1"   # rv
     fi
 }
+
+#KL34G2350
+# Configure keys
+n_century=$'\6'  # C-f
+p_century=$'\2'  # C-b
+n_decade='L'
+p_decade='H'
+n_year='l'
+p_year='h'
+n_month='j'
+p_month='k'
+
 
 # Obtain required arguments
 if (( "$#" > 2 ))
@@ -100,7 +96,7 @@ then
     year_arg=$(date +%Y)
 fi
 
-echo "$month_arg, $year_arg" >2
+echo "$month_arg, $year_arg" >&2
 
 # Parse month
 month=$(parse_month "$month_arg")
@@ -118,7 +114,7 @@ then
     exit 1
 fi
 
-echo "$month, $year" >2
+echo "$month, $year" >&2
 
 # The event loop
 response='a'
@@ -127,64 +123,58 @@ do
     clear
     cal "$month" "$year"
     read -rn1 response
-    printf '\n%q\n' "$response" >2
+    # printf '\n%q\n' "$response" >&2
 
     # Increment century
-    if [[ $response == $'\6' ]]
+    if [[ "$response" = "$n_century" ]]
     then
         if (( year < 9900 ))
         then
             year=$((year + 100))
         fi
-        echo "C-f!" >2
 
     # Decrement century
-    elif [[ $response == $'\2' ]]
+    elif [[ "$response" = "$p_century" ]]
     then
         if (( year > 100 ))
         then
             year=$((year - 100))
         fi
-        echo "C-b!" >2
 
     # Increment decade
-    elif [[ $response == 'L' ]]
+    elif [[ "$response" = "$n_decade" ]]
     then
         if (( year < 9990 ))
         then
             year=$((year + 10))
         fi
-        echo "L!" >2
 
     # Decrement decade
-    elif [[ $response == 'H' ]]
+    elif [[ "$response" = "$p_decade" ]]
     then
         if (( year > 10 ))
         then
             year=$((year - 10))
         fi
-        echo "H!" >2
 
     # Increment year
-    elif [[ $response == 'l' ]]
+    elif [[ "$response" = "$n_year" ]]
     then
         if (( year < 9999 ))
         then
             year=$((year + 1))
         fi
-        echo "l!" >2
 
     # Decrement year
-    elif [[ $response == 'h' ]]
+    elif [[ "$response" = "$p_year" ]]
     then
         if (( year > 1 ))
         then
             year=$((year - 1))
         fi
-        echo "h!" >2
 
     # Increment month
-    elif [[ $response == 'j' ]]
+    elif [[ "$response" = "$n_month" ]]
     then
         if (( "$month" == 12 )) && (( "$year" < 9999 ))
         then
@@ -193,10 +183,9 @@ do
         else
             month=$((month + 1))
         fi
-        echo "j!" >2
 
     # Decrement month
-    elif [[ $response == 'k' ]]
+    elif [[ "$response" = "$p_month" ]]
     then
         if (( "$month" == 1 )) && (( "$year" > 1 ))
         then
@@ -205,6 +194,11 @@ do
         else
             month=$((month - 1))
         fi
-        echo "k!" >2
     fi
 done
+clear
+
+# Todo:
+#  - config file to customize key bindings
+#  - add number modifier
+#  - use getopt to accept other options of cal

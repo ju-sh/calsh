@@ -125,76 +125,69 @@ do
     read -rn1 response
     # printf '\n%q\n' "$response" >&2
 
-    # Increment century
-    if [[ "$response" = "$n_century" ]]
-    then
-        if (( year < 9900 ))
-        then
-            year=$((year + 100))
-        fi
+    case "$response" in
+        "$n_century")
+            # Increment century
+            if (( year < 9900 ))
+            then
+                year=$((year + 100))
+            fi;;
 
-    # Decrement century
-    elif [[ "$response" = "$p_century" ]]
-    then
-        if (( year > 100 ))
-        then
-            year=$((year - 100))
-        fi
+        "$p_century")
+            # Decrement century
+            if (( year > 100 ))
+            then
+                year=$((year - 100))
+            fi;;
 
-    # Increment decade
-    elif [[ "$response" = "$n_decade" ]]
-    then
-        if (( year < 9990 ))
-        then
-            year=$((year + 10))
-        fi
+        "$n_decade")
+            # Increment decade
+            if (( year < 9990 ))
+            then
+                year=$((year + 10))
+            fi;;
 
-    # Decrement decade
-    elif [[ "$response" = "$p_decade" ]]
-    then
-        if (( year > 10 ))
-        then
-            year=$((year - 10))
-        fi
+        "$p_decade")
+            # Decrement decade
+            if (( year > 10 ))
+            then
+                year=$((year - 10))
+            fi;;
 
-    # Increment year
-    elif [[ "$response" = "$n_year" ]]
-    then
-        if (( year < 9999 ))
-        then
-            year=$((year + 1))
-        fi
+        "$n_year")
+            # Increment year
+            if (( year < 9999 ))
+            then
+                year=$((year + 1))
+            fi;;
 
-    # Decrement year
-    elif [[ "$response" = "$p_year" ]]
-    then
-        if (( year > 1 ))
-        then
-            year=$((year - 1))
-        fi
+        "$p_year")
+            # Decrement year
+            if (( year > 1 ))
+            then
+                year=$((year - 1))
+            fi;;
 
-    # Increment month
-    elif [[ "$response" = "$n_month" ]]
-    then
-        if (( "$month" == 12 )) && (( "$year" < 9999 ))
-        then
-            month=1
-            year=$((year + 1))
-        else
-            month=$((month + 1))
-        fi
+        "$n_month")
+            # Increment month
+            if (( "$month" == 12 )) && (( "$year" < 9999 ))
+            then
+                month=1
+                year=$((year + 1))
+            else
+                month=$((month + 1))
+            fi;;
 
-    # Decrement month
-    elif [[ "$response" = "$p_month" ]]
-    then
-        if (( "$month" == 1 )) && (( "$year" > 1 ))
-        then
-            month=12
-            year=$((year - 1))
-        else
-            month=$((month - 1))
-        fi
-    fi
+        "$p_month")
+            # Decrement month
+            if (( "$month" == 1 )) && (( "$year" > 1 ))
+            then
+                month=12
+                year=$((year - 1))
+            else
+                month=$((month - 1))
+            fi;;
+    esac
 done
 clear
 

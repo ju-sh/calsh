@@ -13,6 +13,8 @@ where
 
 ## Navigation
 
+The default key configuration is:
+
 j   : Next month
 k   : Previous month
 l   : Next year
@@ -22,16 +24,22 @@ H   : Previous decade
 C-f : Next century
 C-b : Previous century
 
+This can be changed by changing the variables in the script.
+
 ## Examples
 
-`calsh`
+    calsh
 
 Starts `calsh` with the current month and year.
 
-`calsh 2020`
+---
+
+    calsh 2020
 
 Starts `calsh` with the current month of the year 2020.
 
-`calsh Jun 2010`
+---
+
+    calsh Jun 2010
 
 Starts `calsh` with the month June of the year 2010.

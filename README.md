@@ -17,18 +17,20 @@ where
 
 The default key configuration is:
 
-| Key | Effect           |
-| --- | ------           |
-| j   | Next month       |
-| k   | Previous month   |
-| l   | Next year        |
-| h   | Previous year    |
-| L   | Next decade      |
-| H   | Previous decade  |
-| C-f | Next century     |
-| C-b | Previous century |
+| Key                          | Effect           |
+| ---                          | ------           |
+| <kbd>j</kbd>                 | Next month       |
+| <kbd>k</kbd>                 | Previous month   |
+| <kbd>l</kbd>                 | Next year        |
+| <kbd>h</kbd>                 | Previous year    |
+| <kbd>L</kbd>                 | Next decade      |
+| <kbd>H</kbd>                 | Previous decade  |
+| <kbd>Ctrl</kbd>-<kbd>f</kbd> | Next century     |
+| <kbd>Ctrl</kbd>-<kbd>b</kbd> | Previous century |
 
 This can be changed by changing the variables in the beginning of the script.
+
+Press <kbd>Esc</kbd> or <kbd>q</kbd> to quit.
 
 ## Examples
 

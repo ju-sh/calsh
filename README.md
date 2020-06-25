@@ -17,16 +17,18 @@ where
 
 The default key configuration is:
 
-j   : Next month
-k   : Previous month
-l   : Next year
-h   : Previous year
-L   : Next decade
-H   : Previous decade
-C-f : Next century
-C-b : Previous century
+| Key | Effect           |
+| --- | ------           |
+| j   | Next month       |
+| k   | Previous month   |
+| l   | Next year        |
+| h   | Previous year    |
+| L   | Next decade      |
+| H   | Previous decade  |
+| C-f | Next century     |
+| C-b | Previous century |
 
-This can be changed by changing the variables in the script.
+This can be changed by changing the variables in the beginning of the script.
 
 ## Examples
 

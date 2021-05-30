@@ -68,12 +68,12 @@ function parse_year {
 # Configure keys
 n_century=$'\6'  # C-f
 p_century=$'\2'  # C-b
-n_decade='L'
-p_decade='H'
-n_year='l'
-p_year='h'
-n_month='j'
-p_month='k'
+n_decade='J'
+p_decade='K'
+n_year='j'
+p_year='k'
+n_month='l'
+p_month='h'
 
 
 # Obtain required arguments

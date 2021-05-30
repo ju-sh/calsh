@@ -19,12 +19,12 @@ The default key configuration is:
 
 | Key                          | Effect           |
 | ---                          | ------           |
-| <kbd>j</kbd>                 | Next month       |
-| <kbd>k</kbd>                 | Previous month   |
-| <kbd>l</kbd>                 | Next year        |
-| <kbd>h</kbd>                 | Previous year    |
-| <kbd>L</kbd>                 | Next decade      |
-| <kbd>H</kbd>                 | Previous decade  |
+| <kbd>l</kbd>                 | Next month       |
+| <kbd>h</kbd>                 | Previous month   |
+| <kbd>j</kbd>                 | Next year        |
+| <kbd>k</kbd>                 | Previous year    |
+| <kbd>J</kbd>                 | Next decade      |
+| <kbd>K</kbd>                 | Previous decade  |
 | <kbd>Ctrl</kbd>-<kbd>f</kbd> | Next century     |
 | <kbd>Ctrl</kbd>-<kbd>b</kbd> | Previous century |
 
